@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: Tenpo Test
+  profiles:
+    active: dev
+server:
+  port: 5001

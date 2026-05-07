@@ -35,7 +35,6 @@ public class PercentController {
             @PathVariable("num2") @NotEmpty @Positive String num2){
         
         log.info("Se solicita aplicar porcentaje sobre {} y {}...", num1, num2);
-        
         return ResponseEntity.ok().body(percentCalcService.calculatePercentage(
                 new BigDecimal(num1), new BigDecimal(num2)));
     }

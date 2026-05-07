@@ -1,6 +1,7 @@
 package cl.tenpo.fgeissbuhler.test.api.handlers;
 
 import cl.tenpo.fgeissbuhler.test.api.dto.ErrorResponse;
+import cl.tenpo.fgeissbuhler.test.exceptions.ExtPercentServiceException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import jakarta.validation.ConstraintViolationException;
@@ -31,6 +32,14 @@ public class GlobalExceptionHandler {
         log.error("Error en solicitud: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
                 .body(new ErrorResponse("02", String.format("Demasiadas solicitudes: %s", ex.getMessage()),
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM--dd'T'HH:mm:ss"))));
+    }
+    
+    @ExceptionHandler({ExtPercentServiceException.class})
+    public ResponseEntity<ErrorResponse> handleRetryFailed(RuntimeException ex) {
+        log.error("Error en solicitud: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY)
+                .body(new ErrorResponse("03", String.format("Error en servicio externo: %s", ex.getMessage()),
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM--dd'T'HH:mm:ss"))));
     }
 

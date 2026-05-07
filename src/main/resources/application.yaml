@@ -13,3 +13,8 @@ resilience4j:
         limitForPeriod: 3
         limitRefreshPeriod: 60s       
         timeoutDuration: 0s
+  retry:
+    instances:
+      percentService:        # Máximo de intentos (incluyendo el primero)
+        maxAttempts: 3
+        waitDuration: 2s

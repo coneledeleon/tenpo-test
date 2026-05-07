@@ -5,3 +5,11 @@ spring:
     active: dev
 server:
   port: 5001
+  
+resilience4j:
+  ratelimiter:
+    instances:
+      global:
+        limitForPeriod: 3
+        limitRefreshPeriod: 60s       
+        timeoutDuration: 0s

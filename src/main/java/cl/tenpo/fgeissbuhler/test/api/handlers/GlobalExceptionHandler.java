@@ -9,27 +9,37 @@ import java.time.format.DateTimeFormatter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 
 /**
- * Manejador global de excepciones
+ * Gestor global de excepciones
  */
 @Slf4j
 @ControllerAdvice(basePackages = {"cl.tenpo.fgeissbuhler.test.api.controllers"})
 public class GlobalExceptionHandler {
 
     @ExceptionHandler({ConstraintViolationException.class})
-    public ResponseEntity<ErrorResponse> handleError(RuntimeException ex) {
+    public ResponseEntity<ErrorResponse> handleBadRequest(RuntimeException ex) {
         log.error("Error en solicitud: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse("01", String.format("Error en la solicitud: %s", ex.getMessage()),
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM--dd'T'HH:mm:ss"))));
     }
+    
+    @ExceptionHandler({RequestNotPermitted.class})
+    public ResponseEntity<ErrorResponse> handleRateLimit(RuntimeException ex) {
+        log.error("Error en solicitud: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                .body(new ErrorResponse("02", String.format("Demasiadas solicitudes: %s", ex.getMessage()),
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM--dd'T'HH:mm:ss"))));
+    }
 
+    
     @ExceptionHandler({Exception.class})
-    public ResponseEntity<ErrorResponse> handleError(Exception ex) {
-        log.error("Error interno inesperado: {}", ex.getMessage());
+    public ResponseEntity<ErrorResponse> handleUnespectedError(Exception ex) {
+        log.error("Error interno del servidor: {}", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResponse("99", "Ocurrió un error interno del servidor",
+                .body(new ErrorResponse("99", "Ocurrió un error interno del servidor.",
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM--dd'T'HH:mm:ss"))));
     }
 }

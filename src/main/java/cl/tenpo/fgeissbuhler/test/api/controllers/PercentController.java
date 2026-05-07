@@ -2,6 +2,7 @@ package cl.tenpo.fgeissbuhler.test.api.controllers;
 
 import cl.tenpo.fgeissbuhler.test.api.dto.PercentResponseDto;
 import cl.tenpo.fgeissbuhler.test.services.PercentCalculatorService;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
@@ -21,12 +22,14 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 @RestController
 @RequiredArgsConstructor
+@RateLimiter(name = "global")
 @RequestMapping("/api/v1/percents")
 public class PercentController {
     
     private final PercentCalculatorService percentCalcService;
     
     @GetMapping("/{num1}/{num2}")
+    
     public ResponseEntity<PercentResponseDto> calculatePercentage(
             @PathVariable("num1") @NotEmpty @Positive String num1, 
             @PathVariable("num2") @NotEmpty @Positive String num2){

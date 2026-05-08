@@ -1,5 +1,6 @@
 package cl.tenpo.fgeissbuhler.test.api.controllers;
 
+import cl.tenpo.fgeissbuhler.test.api.aspects.PersistLog;
 import cl.tenpo.fgeissbuhler.test.api.dto.PercentResponseDto;
 import cl.tenpo.fgeissbuhler.test.services.PercentCalculatorService;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
@@ -29,7 +30,7 @@ public class PercentController {
     private final PercentCalculatorService percentCalcService;
     
     @GetMapping("/{num1}/{num2}")
-    
+    @PersistLog
     public ResponseEntity<PercentResponseDto> calculatePercentage(
             @PathVariable("num1") @NotEmpty @Positive String num1, 
             @PathVariable("num2") @NotEmpty @Positive String num2){

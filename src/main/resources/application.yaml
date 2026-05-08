@@ -1,11 +1,24 @@
+## Application
 spring:
   application:
     name: Tenpo Test
   profiles:
     active: dev
+  datasource:   
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:tenpo}?currentSchema=${DB_SCHEMA:tenpo}
+    username: ${DB_USER:fabio}
+    password: ${DB_PASS:fabio}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 server:
   port: 5001
-  
+
+## Resilience
 resilience4j:
   ratelimiter:
     instances:
@@ -15,6 +28,6 @@ resilience4j:
         timeoutDuration: 0s
   retry:
     instances:
-      percentService:        # Máximo de intentos (incluyendo el primero)
+      percentService:
         maxAttempts: 3
         waitDuration: 2s

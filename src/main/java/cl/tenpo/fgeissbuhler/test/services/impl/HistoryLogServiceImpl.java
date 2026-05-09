@@ -1,16 +1,13 @@
 package cl.tenpo.fgeissbuhler.test.services.impl;
 
-import cl.tenpo.fgeissbuhler.test.api.dto.ErrorResponse;
 import cl.tenpo.fgeissbuhler.test.api.dto.HistoryLogItem;
 import cl.tenpo.fgeissbuhler.test.api.dto.HistoryLogResponseDto;
 import cl.tenpo.fgeissbuhler.test.api.dto.PaginationDto;
-import cl.tenpo.fgeissbuhler.test.api.dto.PercentResponseDto;
 import cl.tenpo.fgeissbuhler.test.model.entities.PercentageHistory;
 import cl.tenpo.fgeissbuhler.test.model.repositories.PercentageHistoryRepository;
 import cl.tenpo.fgeissbuhler.test.services.HistoryLogService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -36,8 +33,8 @@ public class HistoryLogServiceImpl implements HistoryLogService {
     private final ObjectMapper mapper;
 
     @Override
-    public void persistLog(String requestPath, String requestParams, String response, long duration) {
-        historyRepository.save(new PercentageHistory(requestPath, requestParams, response, duration));
+    public void persistLog(String requestPath, String requestParams,Integer status, String response, long duration) {
+        historyRepository.save(new PercentageHistory(requestPath, requestParams, status, response, duration));
     }
 
     @Override
@@ -65,6 +62,7 @@ public class HistoryLogServiceImpl implements HistoryLogService {
                         item.getCreated().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
                         item.getEndpoint(),
                         prms,
+                        item.getStatusCode(),
                         resp,
                         item.getDuration()));
             });

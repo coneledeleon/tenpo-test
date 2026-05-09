@@ -47,7 +47,6 @@ public class RequestResponseLogAspect {
 
     @Async
     private void persistLog(ResponseEntity<PercentResponseDto> response, long duration) throws JsonProcessingException {
-
         String methodPath = "desconocido";
         Map<String, Object> params = new HashMap<>();
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -59,7 +58,8 @@ public class RequestResponseLogAspect {
         }
         
         historyService.persistLog(methodPath, 
-                mapper.writeValueAsString(params), 
+                mapper.writeValueAsString(params),
+                response.getStatusCode().value(),
                 mapper.writeValueAsString(response.getBody()), 
                 duration);
         log.info("Solicitud logeada correctamente");

@@ -38,8 +38,11 @@ public class PercentageHistory {
     private String endpoint;
     
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "params")
+    @Column(name = "params", nullable = false, length = 2000)
     private String params;
+    
+    @Column(name = "status_code", nullable = false)
+    private Integer statusCode;
     
     @Column(name = "response", nullable = false, length = 2000)
     private String response;
@@ -47,9 +50,10 @@ public class PercentageHistory {
     @Column(name = "duration_ms")
     private Long duration;
 
-    public PercentageHistory(String endpoint, String params, String response, Long duration) {
+    public PercentageHistory(String endpoint, String params,Integer status, String response, Long duration) {
         this.endpoint = endpoint;
         this.params = params;
+        this.statusCode = status;
         this.response = response;
         this.duration = duration;
     }

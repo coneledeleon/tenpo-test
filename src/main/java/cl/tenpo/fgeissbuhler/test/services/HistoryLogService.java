@@ -7,7 +7,7 @@ import cl.tenpo.fgeissbuhler.test.api.dto.HistoryLogResponseDto;
  */
 public interface HistoryLogService {
     
-    void persistLog(String requestPath, String requestParams, String response, long duration);
+    void persistLog(String requestPath, String requestParams, Integer status, String response, long duration);
     
     HistoryLogResponseDto getHistoryLog(Integer page, Integer size);
 }

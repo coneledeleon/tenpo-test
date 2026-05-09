@@ -26,6 +26,10 @@ public class HistoryLogItem implements Serializable {
     @Schema(description = "Parámetros enviados en la solicitud")
     @JsonProperty("params")
     private Map<String, Object> params;
+    
+    @Schema(description = "Código HTTP respondido en la solicitud")
+    @JsonProperty("statusCode")
+    private Integer statusCode;
 
     @Schema(description = "Respuesta obtenida en formato JSON. Puede ser PercentResponseDto (éxito) o ErrorResponse (error)",
             oneOf = {PercentResponseDto.class, ErrorResponse.class})

@@ -11,7 +11,7 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -23,7 +23,7 @@ resilience4j:
   ratelimiter:
     instances:
       global:
-        limitForPeriod: 3
+        limitForPeriod: 300
         limitRefreshPeriod: 60s       
         timeoutDuration: 0s
   retry:

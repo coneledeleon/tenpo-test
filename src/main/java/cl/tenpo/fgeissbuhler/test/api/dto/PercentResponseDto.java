@@ -6,11 +6,13 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * DTO Respuesta consulta de porcentaje sobre montos
  */
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class PercentResponseDto implements Serializable{
     

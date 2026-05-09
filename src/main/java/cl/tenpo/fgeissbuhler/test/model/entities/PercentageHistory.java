@@ -12,8 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 /**
  * Entidad que maneja los registros históricos de consultas de porcentajes a la API
@@ -36,12 +34,11 @@ public class PercentageHistory {
     
     @Column(name = "endpoint", nullable = false, length = 500)
     private String endpoint;
-    
-    @JdbcTypeCode(SqlTypes.JSON)
+        
     @Column(name = "params", nullable = false, length = 2000)
     private String params;
     
-    @Column(name = "status_code", nullable = false)
+    @Column(name = "status_code")
     private Integer statusCode;
     
     @Column(name = "response", nullable = false, length = 2000)
@@ -50,7 +47,7 @@ public class PercentageHistory {
     @Column(name = "duration_ms")
     private Long duration;
 
-    public PercentageHistory(String endpoint, String params,Integer status, String response, Long duration) {
+    public PercentageHistory(String endpoint, String params, Integer status, String response, Long duration) {
         this.endpoint = endpoint;
         this.params = params;
         this.statusCode = status;

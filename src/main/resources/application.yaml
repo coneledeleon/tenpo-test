@@ -18,6 +18,19 @@ spring:
 server:
   port: 5001
 
+## Springdoc OpenAPI
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    operations-sorter: method
+    tags-sorter: alpha
+    doc-expansion: none
+    filter: false
+
 ## Resilience
 resilience4j:
   ratelimiter:

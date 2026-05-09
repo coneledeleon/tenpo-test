@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -34,11 +33,11 @@ public class PercentController {
     private final HistoryLogService historyService;
 
     @PersistLog
-    @GetMapping("/{num1}/{num2}")
+    @GetMapping
     @RateLimiter(name = "global")
     public ResponseEntity<PercentResponseDto> calculatePercentage(
-            @PathVariable("num1") @NotEmpty @Positive String num1,
-            @PathVariable("num2") @NotEmpty @Positive String num2) {
+            @RequestParam("num1") @Positive String num1,
+            @RequestParam("num2") @Positive String num2) {
 
         log.info("Se solicita aplicar porcentaje sobre {} y {}...", num1, num2);
         return ResponseEntity.ok().body(percentCalcService.calculatePercentage(

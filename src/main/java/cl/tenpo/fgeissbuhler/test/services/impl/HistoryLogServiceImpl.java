@@ -8,6 +8,7 @@ import cl.tenpo.fgeissbuhler.test.model.entities.PercentageHistory;
 import cl.tenpo.fgeissbuhler.test.model.repositories.PercentageHistoryRepository;
 import cl.tenpo.fgeissbuhler.test.services.HistoryLogService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -30,9 +31,10 @@ import org.springframework.stereotype.Service;
 public class HistoryLogServiceImpl implements HistoryLogService {
 
     private final PercentageHistoryRepository historyRepository;
+    private final ObjectMapper mapper;
 
     @Override
-    public void persistLog(String requestPath, Map<String, Object> requestParams, String response, long duration) {
+    public void persistLog(String requestPath, String requestParams, String response, long duration) {
         historyRepository.save(new PercentageHistory(requestPath, requestParams, response, duration));
     }
 
@@ -49,15 +51,17 @@ public class HistoryLogServiceImpl implements HistoryLogService {
         if (!pagedHistory.getContent().isEmpty()) {
             pagedHistory.getContent().forEach(item -> {
                 PercentResponseDto resp = null;
+                Map<String,Object> prms = null;
                 try {
-                    resp = (new ObjectMapper()).readValue(item.getResponse(), PercentResponseDto.class);
+                    resp = mapper.readValue(item.getResponse(), PercentResponseDto.class);
+                    prms = mapper.readValue(item.getParams(), new TypeReference<Map<String,Object>>(){});
                 } catch (JsonProcessingException ex) {
                     log.error("No se pudo parsear una respuesta...");
                 }
                 history.add(new HistoryLogItem(
                         item.getCreated().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
                         item.getEndpoint(),
-                        item.getParams(),
+                        prms,
                         resp,
                         item.getDuration()));
             });

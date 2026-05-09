@@ -26,7 +26,7 @@ public class ExternalPercentGeneratorMock implements ExternalPercentGeneratorSer
     @Override
     public BigDecimal getApplicablePercentage(BigDecimal num1, BigDecimal num2) {
         // Se fuerza una tasa de fallo del 50%, para probar Retry
-        if(Math.random() > 0.5){
+        if(Math.random() > 0.7){
             log.info("Esto es un error forzado en el servicio mock");
             throw new ExtPercentServiceException("Error forzado");
         }

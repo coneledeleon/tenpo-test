@@ -17,8 +17,8 @@ public class HistoryLogItem implements Serializable {
 
     @JsonProperty("created")
     private String created;
-    @JsonProperty("requestUtl")
-    private String requestUtl;
+    @JsonProperty("requestUrl")
+    private String requestUrl;
     @JsonProperty("params")
     private Map<String, Object> params;
     @JsonProperty("response")

@@ -7,7 +7,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.Map;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,8 +38,8 @@ public class PercentageHistory {
     private String endpoint;
     
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "params", columnDefinition = "jsonb")
-    private Map<String,Object> params;
+    @Column(name = "params")
+    private String params;
     
     @Column(name = "response", nullable = false, length = 2000)
     private String response;
@@ -48,7 +47,7 @@ public class PercentageHistory {
     @Column(name = "duration_ms")
     private Long duration;
 
-    public PercentageHistory(String endpoint, Map<String, Object> params, String response, Long duration) {
+    public PercentageHistory(String endpoint, String params, String response, Long duration) {
         this.endpoint = endpoint;
         this.params = params;
         this.response = response;

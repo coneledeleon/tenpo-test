@@ -56,13 +56,7 @@ public class HistoryLogServiceImpl implements HistoryLogService {
                 Map<String, Object> prms = null;
 
                 try {
-                    JsonNode node = mapper.readTree(item.getResponse());
-                    if (node.has("appliedPercentage")) {
-                        resp = mapper.readValue(item.getResponse(), PercentResponseDto.class);
-                    } else {
-                        resp = mapper.readValue(item.getResponse(), ErrorResponse.class);
-                    }
-                    
+                    resp = mapper.readValue(item.getResponse(), new TypeReference<Map<String, Object>>() {});
                     prms = mapper.readValue(item.getParams(), new TypeReference<Map<String, Object>>() {});
                 } catch (JsonProcessingException ex) {
                     log.error("No se pudo parsear una respuesta...", ex);

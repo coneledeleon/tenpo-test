@@ -1,5 +1,6 @@
 package cl.tenpo.fgeissbuhler.test.services.impl;
 
+import cl.tenpo.fgeissbuhler.test.api.dto.ErrorResponse;
 import cl.tenpo.fgeissbuhler.test.api.dto.HistoryLogItem;
 import cl.tenpo.fgeissbuhler.test.api.dto.HistoryLogResponseDto;
 import cl.tenpo.fgeissbuhler.test.api.dto.PaginationDto;
@@ -9,6 +10,7 @@ import cl.tenpo.fgeissbuhler.test.model.repositories.PercentageHistoryRepository
 import cl.tenpo.fgeissbuhler.test.services.HistoryLogService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -40,7 +42,7 @@ public class HistoryLogServiceImpl implements HistoryLogService {
 
     @Override
     public HistoryLogResponseDto getHistoryLog(Integer page, Integer size) {
-        
+
         // En caso de que alguno de los parámetros no venga, se asumen valores de paginación por defecto
         page = Objects.isNull(page) ? 0 : page - 1; // se asume la paginación a nivel de usuario comienza en 1
         size = Objects.isNull(size) ? 10 : size;
@@ -50,13 +52,20 @@ public class HistoryLogServiceImpl implements HistoryLogService {
         List<HistoryLogItem> history = new ArrayList();
         if (!pagedHistory.getContent().isEmpty()) {
             pagedHistory.getContent().forEach(item -> {
-                PercentResponseDto resp = null;
-                Map<String,Object> prms = null;
+                Object resp = null;
+                Map<String, Object> prms = null;
+
                 try {
-                    resp = mapper.readValue(item.getResponse(), PercentResponseDto.class);
-                    prms = mapper.readValue(item.getParams(), new TypeReference<Map<String,Object>>(){});
+                    JsonNode node = mapper.readTree(item.getResponse());
+                    if (node.has("appliedPercentage")) {
+                        resp = mapper.readValue(item.getResponse(), PercentResponseDto.class);
+                    } else {
+                        resp = mapper.readValue(item.getResponse(), ErrorResponse.class);
+                    }
+                    
+                    prms = mapper.readValue(item.getParams(), new TypeReference<Map<String, Object>>() {});
                 } catch (JsonProcessingException ex) {
-                    log.error("No se pudo parsear una respuesta...");
+                    log.error("No se pudo parsear una respuesta...", ex);
                 }
                 history.add(new HistoryLogItem(
                         item.getCreated().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),

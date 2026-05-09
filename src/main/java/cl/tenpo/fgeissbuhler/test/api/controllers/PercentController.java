@@ -6,7 +6,6 @@ import cl.tenpo.fgeissbuhler.test.api.dto.PercentResponseDto;
 import cl.tenpo.fgeissbuhler.test.services.HistoryLogService;
 import cl.tenpo.fgeissbuhler.test.services.PercentCalculatorService;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;

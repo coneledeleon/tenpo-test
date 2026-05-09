@@ -29,16 +29,15 @@ public class RequestResponseLogAspect {
     private final HistoryLogService historyService;
     private final ObjectMapper mapper;
 
-    @Around("@annotation(cl.tenpo.fgeissbuhler.test.api.aspects.PersistLog)")
+    @Around("@annotation(cl.tenpo.fgeissbuhler.test.api.aspects.PersistLog) || @within(cl.tenpo.fgeissbuhler.test.api.aspects.PersistLog)")
     public Object logRequestResponse(ProceedingJoinPoint joinPoint) throws Throwable {
         long start = System.currentTimeMillis();
 
         try {
             log.info("Ejecutando la solicitud...");
             Object result = joinPoint.proceed();
-
+            
             persistLog((ResponseEntity<PercentResponseDto>) result, System.currentTimeMillis() - start);
-
             return result;
         } catch (Throwable ex) {
             log.error("Ocurrió un error al procesar la solicitud: ", ex);

@@ -22,7 +22,7 @@ public class HistoryLogItem implements Serializable {
     @JsonProperty("params")
     private Map<String, Object> params;
     @JsonProperty("response")
-    private PercentResponseDto response;
+    private Object response;
     @JsonProperty("duration")
     private Long duration;
 

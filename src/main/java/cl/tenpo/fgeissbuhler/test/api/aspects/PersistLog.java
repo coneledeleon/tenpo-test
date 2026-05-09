@@ -9,8 +9,8 @@ import java.lang.annotation.Target;
  *
  * @author Fabio Geissbuhler A. <gssbhler.code@gmail.com>
  */
-@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
+@Target(value = {ElementType.METHOD, ElementType.TYPE})
 public @interface PersistLog {
     
 }

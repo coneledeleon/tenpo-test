@@ -8,33 +8,14 @@ Challenge técnico para optar al cargo de Desarrollador Backend en Tenpo.
 
 ## 2. Requisitos Previos
 
-- **Java 21** ([Documentación oficial](https://docs.oracle.com/en/java/javase/21/install/overview-jdk-installation.html))
-- **Maven 3.9+** ([Documentación oficial](https://maven.apache.org/install.html))
-- **Docker y Docker Compose** ([Documentación oficial](https://docs.docker.com/compose/install/))
+- **Docker y Docker Compose** ([Como instalar](https://docs.docker.com/compose/install/))
 
 ## 3. Ejecución Local
 
-### Opción 1: Con Maven (desarrollo)
-
-Requiere tener PostgreSQL corriendo (puede ser via Docker Compose o instalación local).
-
+Descargar el siguiente archivo: `https://github.com/coneledeleon/tenpo-test/blob/develop/docker-compose.zip`
 ```bash
-# 1. Clonar el repositorio
-
-# 2. Compilar el proyecto
-./mvnw clean package -DskipTests
-
-# 3. Ejecutar la aplicación
-./mvnw spring-boot:run
+wget -O compose.zip https://github.com/coneledeleon/tenpo-test/blob/develop/docker-compose.zip
 ```
-
-La aplicación estará disponible en `http://localhost:5001`
-
-```bash
-# Para detener la aplicación (Ctrl+C en terminal)
-```
-
-### Opción 2: Con Docker Compose (completo)
 
 Ejecuta la API y PostgreSQL en contenedores.
 

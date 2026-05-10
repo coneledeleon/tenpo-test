@@ -1,11 +1,13 @@
 package cl.tenpo.fgeissbuhler.test.services.impl;
 
 import cl.tenpo.fgeissbuhler.test.exceptions.ExtPercentServiceException;
+import cl.tenpo.fgeissbuhler.test.exceptions.InvalidArgumentException;
 import cl.tenpo.fgeissbuhler.test.services.ExternalPercentGeneratorService;
 import io.github.resilience4j.retry.annotation.Retry;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,10 @@ public class ExternalPercentGeneratorMock implements ExternalPercentGeneratorSer
     @Retry(name = "percentService")
     @Override
     public BigDecimal getApplicablePercentage(BigDecimal num1, BigDecimal num2) {
+        if(Objects.isNull(num1) || Objects.isNull(num2)){
+            throw new InvalidArgumentException("Los parámetros de entrada no pueden ser nulos.");
+        }
+        
         // Se fuerza una tasa de fallo del 50%, para probar Retry
         if(Math.random() > 0.5){
             log.info("Esto es un error forzado en el servicio mock");

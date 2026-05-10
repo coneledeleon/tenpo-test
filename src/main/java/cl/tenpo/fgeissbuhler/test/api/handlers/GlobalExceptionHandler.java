@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import io.github.resilience4j.ratelimiter.RequestNotPermitted;
+import cl.tenpo.fgeissbuhler.test.exceptions.InvalidArgumentException;
 
 /**
  * Gestor global de excepciones
@@ -43,6 +44,14 @@ public class GlobalExceptionHandler {
         log.error("Error en solicitud: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY)
                 .body(new ErrorResponse("03", String.format("Error en servicio externo: %s", ex.getMessage()),
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM--dd'T'HH:mm:ss"))));
+    }
+    
+    @ExceptionHandler({InvalidArgumentException.class})
+    public ResponseEntity<ErrorResponse> handleMethodValidationError(RuntimeException ex) {
+        log.error("Error en solicitud: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT)
+                .body(new ErrorResponse("04", String.format("Error interno de validación: %s", ex.getMessage()),
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM--dd'T'HH:mm:ss"))));
     }
 

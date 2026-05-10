@@ -9,6 +9,8 @@ import java.time.format.DateTimeFormatter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import cl.tenpo.fgeissbuhler.test.exceptions.InvalidArgumentException;
+import java.util.Objects;
 
 /**
  * Servicio mock de cálculo de porcentaje para desarrollo Solo aplica para profile "dev"
@@ -25,7 +27,16 @@ public class PercentCalculatorServiceImpl implements PercentCalculatorService {
      */
     @Override
     public PercentResponseDto calculatePercentage(BigDecimal num1, BigDecimal num2) {
+        if(Objects.isNull(num1) || Objects.isNull(num2)){
+            throw new InvalidArgumentException("Los parámetros de entrada no pueden ser nulos.");
+        }
+        
         final BigDecimal appliedPercent = percentGenService.getApplicablePercentage(num1, num2);
+        
+        if(Objects.isNull(appliedPercent) || BigDecimal.ZERO.compareTo(appliedPercent) == 1){
+            throw new RuntimeException("Valor de porcentaje aplicado negativo. Valor no manejado");
+        }
+        
         final BigDecimal result = num1.add(num2)
                 .multiply(BigDecimal.ONE.add(appliedPercent));
         log.info("Procentaje aplicado: {} | valor total: {}", appliedPercent, result);

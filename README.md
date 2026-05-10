@@ -140,7 +140,24 @@ El archivo de configuración principal se encuentra en: `src/main/resources/appl
 - **Docker / Docker Compose** - Contenedores
 - **Maven** - Gestión de dependencias
 
-## 9. Autor
+## 9. Decisiones de Diseño
+
+1. Se construye un único controller, no por la baja cantidad de endpoints, sino porque todos los endpoints están asociados a una mismo concepto: la consulta de porcentajes.
+2. Aún cuando se construye un único endpoint, se privilegia el control global de excepciones mediante ControllerAdvice y no con ExceptionHandler, porque el costo de implementación es basicamente el mismo, y ControllerAdvice permite añadir nuevos Controllers al proyecto, si necesidad de re implementar control de errores.
+3. Todos los endpoints construidos operan con método GET. Aún cuando la "consulta de porcentaje" da origen a un registro en BD, esto es una consuecuencia de la consulta, el método dispuesto no tiene como finalidad la creación de registros de un recurso.
+4. La implementación de RateLimit y Reintentos se hizo con Resilience4j, porque tiene el manejo resuelto de muy buena manera. Para ambos casos, los parámetros de configuración no fueron configurados para ser obtenidos desde variables de entorno, porque no lo consideré necesario.
+5. La implementación de registro histórico de solicitudes se hace usando SpringAOP y no un filtro, por la necesidad de que la persistencia sea asincrona, y los componentes en el FilterChain no permiten asincronía de forma orgánica. De todas maneras la información de la solicitud se obtiene desde el RequestContextHolder.
+6. La implementación de obtención de historial de solicitudes tiene parámetros de paginación no requeridos como parte del request, pero en caso de no venir, se asume paginación por defecto, para evitar que se pueda sobrecargar el endpoint con consultas no paginadas.
+7. Si bien el ejercicio pedía explicitamente que el registro de solicitudes y sus respuestas fuera para "todas las llamadas realizadas a los endpoints de la API", decidí no implementar registro de las solicitudes a la obtención de historial de solicitudes, por un tema de diseño: Si encadeno N consultas de historial, se iba a empezar a generar data de respuesta recursiva que en poco tiempo iba a exceder el largo permitido para el campo. Esto obligaría a dejar el campo sin un largo límite, y esto es una mala práctica desde la perspectiva del diseño de modelos de datos.
+8. Si bien el ejercicio no lo pedía, el registro histórico de consultas incluye el status y tiempo de respuesta, para tener más información sobre el resultado.
+9. Sobre la implementación de docker compose, y por la forma de estructurar el proyecto, se decidió delegar a Spring la creación del modelo, esto para simplificar el ejercicio.
+10. Sobre la base de datos, se decidió no añadir índices o constraints adicionales, porque la operación de la API no lo requiere: no hay consultas parametrizables, por la naturaleza del registro no se identifican llaves de unicidad claras, así que el esquema no se complejizó innecesariamente.
+11. Los test unitarios se agregan solo sobre componentes @Service, porque la idea de los test unitarios es validar funcionalidades que reflejen lógica de negocio, de forma aislada. Para todas estas piezas se establecen casos de éxito y de fallo, para validar que las decisiones se estén controlando de forma esperada.
+12. Se escoge el puerto 5001 como puerto de exposición de la API, para evitar colisiones con puertos regularmente utilizados por otros servicios conocidos, al levantar la app.
+13. El servicio externo de consulta de porcentaje se implementó como un mock funcional solo en profile "dev". La aplicación se levanta en este profile y todo funciona. Para cambiar el profile es necesaria una nueva implementación de esta interfaz, que apunte a un servicio externo real.
+14. Sobre el endpoint de consulta de porcentaje, inicialmente decidí que los parámetros num1 y num2 se pasaran como @PathVariables, me parece más claro, y le da caracter de "no opcional" a los valores, creo que era una mejor opción, pero como la solicitud pedía "registro de parámetros", asumí que se esperaba que estos valores fueran @RequestParam, y lo abordé de esa forma. Preferí ajustarme "a la definición".
+
+## 10. Autor
 
 **Fabio Geissbuhler Alarcón**
 - GitHub: [https://github.com/coneledeleon](https://github.com/coneledeleon)

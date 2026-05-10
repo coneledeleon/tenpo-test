@@ -46,7 +46,7 @@ public class HistoryLogServiceImpl implements HistoryLogService {
         Pageable pagination = PageRequest.of(page, size);
 
         Page<PercentageHistory> pagedHistory = historyRepository.findAll(pagination);
-        List<HistoryLogItem> history = new ArrayList();
+        List<HistoryLogItem> history = new ArrayList<>();
         if (!pagedHistory.getContent().isEmpty()) {
             pagedHistory.getContent().forEach(item -> {
                 Object resp = null;

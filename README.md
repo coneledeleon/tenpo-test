@@ -12,26 +12,15 @@ Challenge técnico para optar al cargo de Desarrollador Backend en Tenpo.
 
 ## 3. Ejecución Local
 
-Descargar el siguiente archivo: `https://github.com/coneledeleon/tenpo-test/blob/develop/docker-compose.zip`
-```bash
-wget -O compose.zip https://github.com/coneledeleon/tenpo-test/blob/develop/docker-compose.zip
-```
-
-Ejecuta la API y PostgreSQL en contenedores.
+Para levantar el proyecto, solo necesitas asignar permisos de ejecución y correr el script `run-compose.sh`
 
 ```bash
-# Desde la raíz del proyecto
-docker-compose -f docker-compose/tenpo-test-compose.yml up -d
+wget https://raw.githubusercontent.com/coneledeleon/tenpo-test/refs/heads/develop/run-compose.sh && chmod +x run-compose.sh && ./run-compose.sh
 ```
 
 Esto levantará:
 - API: `http://localhost:5001`
 - PostgreSQL: `localhost:5432`
-
-```bash
-# Para detener los servicios
-docker-compose -f docker-compose/tenpo-test-compose.yml down
-```
 
 ## 4. Endpoints
 
@@ -54,7 +43,6 @@ Calcula el porcentaje adicional sobre la suma de dos números.
   "timestamp": "2026-05-08T14:30:00"
 }
 ```
-
 ---
 
 ### GET /api/v1/percents/history

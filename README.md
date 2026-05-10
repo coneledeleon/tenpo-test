@@ -154,6 +154,6 @@ Al levantar la aplicación, la documentación interactiva está disponible en:
 ## 8. Autor
 
 **Fabio Geissbuhler Alarcón**
-- GitHub: [https://github.com/fgeissbuhler](https://github.com/fgeissbuhler)
+- GitHub: [https://github.com/coneledeleon](https://github.com/coneledeleon)
 - LinkedIn: [https://www.linkedin.com/in/fabiogeissbuhler](https://www.linkedin.com/in/fabiogeissbuhler)
 - Email: gssbhler.code@gmail.com

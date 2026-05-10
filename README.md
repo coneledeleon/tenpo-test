@@ -12,35 +12,7 @@ Challenge técnico para optar al cargo de Desarrollador Backend en Tenpo.
 - **Maven 3.9+** ([Documentación oficial](https://maven.apache.org/install.html))
 - **Docker y Docker Compose** ([Documentación oficial](https://docs.docker.com/compose/install/))
 
-## 3. Stack Tecnológico
-
-- **Spring Boot 4.0.6** - Framework principal
-- **Java 21** - Lenguaje
-- **PostgreSQL 16** - Base de datos
-- **Spring Data JPA / Hibernate** - ORM
-- **Spring AOP** - Programación orientada a aspectos
-- **Resilience4j** - Rate limiting y reintentos
-- **Springdoc OpenAPI** - Documentación Swagger
-- **Lombok** - Reducción de boilerplate
-- **Docker / Docker Compose** - Contenedores
-- **Maven** - Gestión de dependencias
-
-## 4. Configuración
-
-La aplicación se configura mediante variables de entorno. Estas pueden definirse en un archivo `.env` o pasarse directamente al contenedor.
-
-| Variable | Descripción | Default |
-|----------|-------------|---------|
-| `DB_HOST` | Host de PostgreSQL | `localhost` |
-| `DB_PORT` | Puerto de PostgreSQL | `5432` |
-| `DB_NAME` | Nombre de la base de datos | `tenpo` |
-| `DB_SCHEMA` | Esquema de la base de datos | `tenpo` |
-| `DB_USER` | Usuario de PostgreSQL | `fabio` |
-| `DB_PASS` | Contraseña de PostgreSQL | `******` |
-
-El archivo de configuración principal se encuentra en: `src/main/resources/application.yaml`
-
-## 5. Ejecución Local
+## 3. Ejecución Local
 
 ### Opción 1: Con Maven (desarrollo)
 
@@ -80,7 +52,7 @@ Esto levantará:
 docker-compose -f docker-compose/tenpo-test-compose.yml down
 ```
 
-## 6. Endpoints
+## 4. Endpoints
 
 ### GET /api/v1/percents
 
@@ -142,6 +114,41 @@ Al levantar la aplicación, la documentación interactiva está disponible en:
 - **Swagger UI**: [http://localhost:5001/swagger-ui.html](http://localhost:5001/swagger-ui.html)
 - **OpenAPI (JSON)**: [http://localhost:5001/v3/api-docs](http://localhost:5001/v3/api-docs)
 
+## 5. Cómo Probar
+
+Al ser endpoints GET sin autenticación, pueden probarse directamente desde el navegador, o mediante CURL:
+
+### Endpoint de cálculo
+
+```bash
+curl -s "http://localhost:5001/api/v1/percents?num1=100&num2=200" | jq
+```
+
+### Endpoint de historial
+
+```bash
+curl -s "http://localhost:5001/api/v1/percents/history?page=1&size=10" | jq
+```
+
+> **Nota**: El flag `jq` permite formatear la respuesta JSON de forma legible. Si no dispones de `jq`, puedes omitirlo y la respuesta se mostrará en una sola línea.
+
+También puedes acceder a la documentación interactiva en Swagger UI para probar los endpoints desde la interfaz.
+
+## 6. Configuración
+
+La aplicación se configura mediante variables de entorno. Estas pueden definirse en un archivo `.env` o pasarse directamente al contenedor.
+
+| Variable | Descripción | Default |
+|----------|-------------|---------|
+| `DB_HOST` | Host de PostgreSQL | `localhost` |
+| `DB_PORT` | Puerto de PostgreSQL | `5432` |
+| `DB_NAME` | Nombre de la base de datos | `tenpo` |
+| `DB_SCHEMA` | Esquema de la base de datos | `tenpo` |
+| `DB_USER` | Usuario de PostgreSQL | `fabio` |
+| `DB_PASS` | Contraseña de PostgreSQL | `******` |
+
+El archivo de configuración principal se encuentra en: `src/main/resources/application.yaml`
+
 ## 7. Características
 
 - **Rate Limiting**: Límite de 3 solicitudes por minuto por cliente (configurable via Resilience4j)
@@ -151,7 +158,20 @@ Al levantar la aplicación, la documentación interactiva está disponible en:
 - **Documentación Interactiva**: Swagger UI y OpenAPI 3 disponibles
 - **Manejo de Errores**: GlobalExceptionHandler con códigos de error estandarizados
 
-## 8. Autor
+## 8. Stack Tecnológico
+
+- **Spring Boot 4.0.6** - Framework principal
+- **Java 21** - Lenguaje
+- **PostgreSQL 16** - Base de datos
+- **Spring Data JPA / Hibernate** - ORM
+- **Spring AOP** - Programación orientada a aspectos
+- **Resilience4j** - Rate limiting y reintentos
+- **Springdoc OpenAPI** - Documentación Swagger
+- **Lombok** - Reducción de boilerplate
+- **Docker / Docker Compose** - Contenedores
+- **Maven** - Gestión de dependencias
+
+## 9. Autor
 
 **Fabio Geissbuhler Alarcón**
 - GitHub: [https://github.com/coneledeleon](https://github.com/coneledeleon)
